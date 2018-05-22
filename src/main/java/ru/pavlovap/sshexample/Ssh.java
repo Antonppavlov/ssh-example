@@ -18,20 +18,20 @@ public class Ssh {
 
     private static final Integer port = 22;
 
-    protected void sendCommand(String command) throws Exception {
+    protected void sendCommand(String command) {
         Session session = null;
         ChannelExec channelExec = null;
         try {
-            JSch jsch = new JSch();
-            session = jsch.getSession(user, host, port);
+            session = new JSch().getSession(user, host, port);
 
             session.setConfig(
                     "PreferredAuthentications",
                     "publickey,keyboard-interactive,password"
             );
 
-            UserInfo ui = new SUserInfo(password, null);
-            session.setUserInfo(ui);
+            session.setUserInfo(
+                    new SUserInfo(password, null)
+            );
             session.setPassword(password);
             session.connect();
 
