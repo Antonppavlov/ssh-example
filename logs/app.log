@@ -1,0 +1,6 @@
+2018-03-23 02:03:15.455 [main] ERROR ru.pavlovap.sshexample.Ssh - java.net.ConnectException: Connection refused (Connection refused)
+2018-03-23 02:03:15.534 [main] ERROR ru.pavlovap.sshexample.Ssh - com.jcraft.jsch.Util.createSocket(Util.java:349)
+2018-03-23 02:03:15.534 [main] ERROR ru.pavlovap.sshexample.Ssh - com.jcraft.jsch.Session.connect(Session.java:215)
+2018-03-23 02:03:15.535 [main] ERROR ru.pavlovap.sshexample.Ssh - com.jcraft.jsch.Session.connect(Session.java:183)
+2018-03-23 02:03:15.535 [main] ERROR ru.pavlovap.sshexample.Ssh - ru.pavlovap.sshexample.Ssh.sendCommand(Ssh.java:39)
+2018-03-23 02:03:15.535 [main] ERROR ru.pavlovap.sshexample.Ssh - ru.pavlovap.sshexample.Start.main(Start.java:6)

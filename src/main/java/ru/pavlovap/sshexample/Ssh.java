@@ -4,12 +4,16 @@ import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
 import com.jcraft.jsch.UserInfo;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
-import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@Slf4j
 public class Ssh {
 
     private final static String HOST = "";
@@ -35,20 +39,23 @@ public class Ssh {
             session.connect();
 
             channelExec = (ChannelExec) session.openChannel("exec");
-            InputStream in = channelExec.getInputStream();
             channelExec.setCommand(command);
             channelExec.connect();
 
             AtomicInteger atomicInteger = new AtomicInteger();
 
-            new BufferedReader(new InputStreamReader(in))
+            new BufferedReader(new InputStreamReader(channelExec.getInputStream()))
                     .lines()
                     .forEach(
-                            linea -> System.out.println(atomicInteger.getAndIncrement() + " : " + linea)
+                            linea -> log.info(atomicInteger.getAndIncrement() + " : " + linea)
                     );
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
+            Arrays.stream(e.getStackTrace()).forEach(
+                    stackTraceElement ->
+                            log.error(stackTraceElement.toString())
+            );
         } finally {
             if (channelExec != null) {
                 channelExec.disconnect();
@@ -63,23 +70,12 @@ public class Ssh {
 
     }
 
+    @Getter
+    @AllArgsConstructor
     public class SUserInfo implements UserInfo {
 
         private String password;
-        private String passPhrase;
-
-        public SUserInfo(String password, String passPhrase) {
-            this.password = password;
-            this.passPhrase = passPhrase;
-        }
-
-        public String getPassphrase() {
-            return passPhrase;
-        }
-
-        public String getPassword() {
-            return password;
-        }
+        private String passphrase;
 
         public boolean promptPassphrase(String arg0) {
             return true;
