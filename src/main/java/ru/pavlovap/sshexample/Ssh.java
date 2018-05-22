@@ -8,6 +8,7 @@ import com.jcraft.jsch.UserInfo;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Ssh {
 
@@ -38,12 +39,14 @@ public class Ssh {
             InputStream in = channelExec.getInputStream();
             channelExec.setCommand(command);
             channelExec.connect();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-            String linea;
-            int index = 0;
-            while ((linea = reader.readLine()) != null) {
-                System.out.println(++index + " : " + linea);
-            }
+
+            AtomicInteger atomicInteger = new AtomicInteger();
+
+            new BufferedReader(new InputStreamReader(in))
+                    .lines()
+                    .forEach(
+                            linea -> System.out.println(atomicInteger.getAndIncrement() + " : " + linea)
+                    );
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -60,12 +63,13 @@ public class Ssh {
         }
 
     }
+
     public class SUserInfo implements UserInfo {
 
         private String password;
         private String passPhrase;
 
-        public SUserInfo (String password, String passPhrase) {
+        public SUserInfo(String password, String passPhrase) {
             this.password = password;
             this.passPhrase = passPhrase;
         }
