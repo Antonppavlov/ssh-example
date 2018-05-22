@@ -12,27 +12,26 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Ssh {
 
-    String host = "";
-    String user = "";
-    String password = "";
-
-    private static final Integer port = 22;
+    private final static String HOST = "";
+    private final static String USER = "";
+    private final static String PASSWORD = "";
+    private static final int PORT = 22;
 
     protected void sendCommand(String command) {
         Session session = null;
         ChannelExec channelExec = null;
         try {
-            session = new JSch().getSession(user, host, port);
+            session = new JSch().getSession(USER, HOST, PORT);
 
             session.setConfig(
                     "PreferredAuthentications",
-                    "publickey,keyboard-interactive,password"
+                    "publickey,keyboard-interactive,PASSWORD"
             );
 
             session.setUserInfo(
-                    new SUserInfo(password, null)
+                    new SUserInfo(PASSWORD, null)
             );
-            session.setPassword(password);
+            session.setPassword(PASSWORD);
             session.connect();
 
             channelExec = (ChannelExec) session.openChannel("exec");
