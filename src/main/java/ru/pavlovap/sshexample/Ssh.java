@@ -42,7 +42,7 @@ public class Ssh {
             channelExec.setCommand(command);
             channelExec.connect();
 
-            AtomicInteger atomicInteger = new AtomicInteger();
+            AtomicInteger atomicInteger = new AtomicInteger(1);
 
             new BufferedReader(new InputStreamReader(channelExec.getInputStream()))
                     .lines()
