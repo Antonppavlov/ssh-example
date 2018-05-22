@@ -45,17 +45,14 @@ public class Ssh {
             AtomicInteger atomicInteger = new AtomicInteger(1);
 
             new BufferedReader(new InputStreamReader(channelExec.getInputStream()))
-                    .lines()
-                    .forEach(
-                            linea -> log.info(atomicInteger.getAndIncrement() + " : " + linea)
-                    );
+                    .lines().forEach(
+                    linea -> log.info(atomicInteger.getAndIncrement() + " : " + linea)
+            );
 
         } catch (Exception e) {
             log.error(e.getMessage());
-            Arrays.stream(e.getStackTrace()).forEach(
-                    stackTraceElement ->
-                            log.error(stackTraceElement.toString())
-            );
+            Arrays.stream(e.getStackTrace())
+                    .map(StackTraceElement::toString).forEach(log::error);
         } finally {
             if (channelExec != null) {
                 channelExec.disconnect();
